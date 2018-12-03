@@ -70,10 +70,13 @@ loader.load(
 
 loader.load(
 	// resource URL
-	'models/tophat.obj',
+	'models/faceLandmarks.obj',
 	// called when resource is loaded
 	function ( object ) {
-
+		size = .01
+		object.scale.x = size
+		object.scale.y = size
+		object.scale.z = size
 
 		object.children[0].material = materialSolid;
 
@@ -97,12 +100,12 @@ var render = function () {
   // cube.rotation.x += 0.01;
   // cube.rotation.y -= 0.01;
 
-  	for (var i = 0; i < objects.length; i++) {
+ //  	for (var i = 0; i < objects.length; i++) {
 
-	  objects[i].rotation.x += 0.01;
-	  objects[i].rotation.y += 0.01;
+	//   objects[i].rotation.x += 0.01;
+	//   objects[i].rotation.y += 0.01;
 
-	}
+	// }
 
   // Render the scene
   renderer.render(scene, camera);
