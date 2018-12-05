@@ -26,26 +26,29 @@ document.body.appendChild( renderer.domElement );
 // ------------------------------------------------
 
 // Create a Cube Mesh with basic material
-var texture = new THREE.TextureLoader().load( "models/head3d.jpg" );
+var texture = new THREE.TextureLoader().load( "models/bethhead3d.jpg" );
 
 
 var geometry = new THREE.BoxGeometry( 1, 1, 1 );
 var materialTexture = new THREE.MeshBasicMaterial( { map: texture }); 
 var materialSolid = new THREE.MeshBasicMaterial( { color: "#433F81" } );
+
+var texture = new THREE.TextureLoader().load( "models/duckhat.mtl" );
+var materialDuck = new THREE.MeshBasicMaterial( { map: texture }); 
 //var cube = new THREE.Mesh( geometry, material );
 
 
 // Add cube to Scene
 // scene.add( cube );
 
-var objects = []
+var objects = {}
 
 var loader = new THREE.OBJLoader();
 
 // load a resource
 loader.load(
 	// resource URL
-	'models/head3d.obj',
+	'models/bethhead3d.obj',
 	// called when resource is loaded
 	function ( object ) {
 		size = .01
@@ -55,7 +58,7 @@ loader.load(
 
 		object.children[0].material = materialTexture
 
-		objects.push(object)
+		objects["head"] = object
 		scene.add( object );
 	},
 	// called when loading is in progresses
@@ -70,7 +73,7 @@ loader.load(
 
 loader.load(
 	// resource URL
-	'models/faceLandmarks.obj',
+	'models/bethfaceLandmarks.obj',
 	// called when resource is loaded
 	function ( object ) {
 		size = .01
@@ -80,7 +83,7 @@ loader.load(
 
 		object.children[0].material = materialSolid;
 
-		objects.push(object);
+		objects["faceLandmarks"] = object;
 		scene.add( object );
 	},
 	// called when loading is in progresses
@@ -92,6 +95,61 @@ loader.load(
 		console.log( 'An error happened' );
 	}
 );
+
+// loader.load(
+// 	// resource URL
+// 	'models/duckhat.obj',
+// 	// called when resource is loaded
+// 	function ( object ) {
+// 		size = 1.5
+// 		object.scale.x = size
+// 		object.scale.y = size
+// 		object.scale.z = size
+
+// 		object.position.y = -3
+
+// 		object.children[0].material = materialDuck;
+
+// 		objects["duckhat"] = object;
+// 		scene.add( object );
+
+
+// 	},
+// 	// called when loading is in progresses
+// 	function ( xhr ) {
+// 		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+// 	},
+// 	// called when loading has errors
+// 	function ( error ) {
+// 		console.log( 'An error happened' );
+// 	}
+// );
+
+var mtlLoader = new THREE.MTLLoader();
+mtlLoader.setPath('models/');
+mtlLoader.load('duckhat.mtl', function(materials) {
+  	materials.preload();
+  	var objLoader = new THREE.OBJLoader();
+  	objLoader.setMaterials(materials);
+  	objLoader.setPath('models');
+  	objLoader.load('duckhat.obj', function(object) {
+	    	size = 1.5
+			object.scale.x = size
+			object.scale.y = size
+			object.scale.z = size
+
+			object.position.y = -3
+	    	scene.add(object);
+	  	}, 
+	  	function ( xhr ) {
+			console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+		},
+		// called when loading has errors
+		function ( error ) {
+			console.log( 'An error happened' );
+		}
+	)
+});
 
 // Render Loop
 var render = function () {
