@@ -12,14 +12,14 @@
    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.min.js"></script>
    <script src="https://threejs.org/examples/js/controls/TrackballControls.js"></script>
    <script src='https://mamboleoo.be/learnThree/demos/OBJLoader.js'></script>
-   <script src="https://raw.githubusercontent.com/mrdoob/three.js/master/examples/js/loaders/MTLLoader.js"></script>
+   <script src="MTLloader.js"></script>
 </head>
 <body>
   <button onclick="loadHead('models/bethhead3d.obj', materialTexture1, 'models/bethfaceLandmarks.obj')">Head 1</button>
   <button onclick="loadHead('models/mirekHead3d.obj', materialTexture2,'models/mirekFaceLandmarks.obj')">Head 2</button>
 
-  <button>Duck Hat</button>
-  <button>Hat 2</button>
+  <button onclick="loadHat()">Duck Hat</button>
+  <button>Top Hat</button>
 
   <!-- <button onclick="toggleLandmarks()">Toggle Landmarks</button> -->
 
