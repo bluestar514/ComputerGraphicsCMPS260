@@ -6,14 +6,23 @@
   <!--  Simple reset to delete the margins  -->
   <style>
     body { margin: 0; }
-    canvas { width: 100%; height: 100% }
+    canvas { width: 500px; height: 500px; }
   </style>
   <!--  Three.js CDN  -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.min.js"></script> 
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.min.js"></script>
+   <script src="https://threejs.org/examples/js/controls/TrackballControls.js"></script>
    <script src='https://mamboleoo.be/learnThree/demos/OBJLoader.js'></script>
+   <script src="https://raw.githubusercontent.com/mrdoob/three.js/master/examples/js/loaders/MTLLoader.js"></script>
 </head>
 <body>
-  <!--  Our code  -->
+  <button onclick="loadHead('models/bethhead3d.obj', materialTexture1, 'models/bethfaceLandmarks.obj')">Head 1</button>
+  <button onclick="loadHead('models/mirekHead3d.obj', materialTexture2,'models/mirekFaceLandmarks.obj')">Head 2</button>
+
+  <button>Duck Hat</button>
+  <button>Hat 2</button>
+
+  <!-- <button onclick="toggleLandmarks()">Toggle Landmarks</button> -->
+
   <script src="script.js"></script>
 </body>
 </html>
