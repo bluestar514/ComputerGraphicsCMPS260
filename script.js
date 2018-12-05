@@ -9,6 +9,9 @@ var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
 camera.position.z = 4;
 
+var light = new THREE.AmbientLight( 0xFFFFFF, 1);
+scene.add(light);
+
 //TrackballControls
 var controls = new THREE.TrackballControls(camera);
 
@@ -24,6 +27,7 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 // Append Renderer to DOM
 document.body.appendChild( renderer.domElement );
 
+var headTop;
 // ------------------------------------------------
 // FUN STARTS HERE
 // ------------------------------------------------
@@ -32,12 +36,12 @@ document.body.appendChild( renderer.domElement );
 var texture1 = new THREE.TextureLoader().load( "models/bethhead3d.jpg" );
 var texture2 = new THREE.TextureLoader().load( "models/mirekHead3d.jpg")
 
-var materialTexture1 = new THREE.MeshBasicMaterial( { map: texture1 });
-var materialTexture2 = new THREE.MeshBasicMaterial( { map: texture2} );
-var materialSolid = new THREE.MeshBasicMaterial( { color: "#433F81" } );
+var materialTexture1 = new THREE.MeshPhongMaterial( { map: texture1 });
+var materialTexture2 = new THREE.MeshPhongMaterial( { map: texture2} );
+var materialSolid = new THREE.MeshPhongMaterial( { color: "#433F81" } );
 
 var textureDuck = new THREE.TextureLoader().load( "models/duckhat.mtl" );
-var materialDuck = new THREE.MeshBasicMaterial( { map: textureDuck });
+var materialDuck = new THREE.MeshPhongMaterial( { map: textureDuck });
 //var cube = new THREE.Mesh( geometry, material );
 // var geometry = new THREE.BoxGeometry( 1, 1, 1 );
 // Add cube to Scene
@@ -53,6 +57,8 @@ function loadHead(head, materialTexture, landmarks){
 	while(scene.children.length > 0){
 		scene.remove(scene.children[0]);
 	}
+
+	scene.add(light);
 
 	// load a resource
 	loader.load(
@@ -85,11 +91,12 @@ function loadHead(head, materialTexture, landmarks){
 		landmarks,
 		// called when resource is loaded
 		function ( object ) {
-			size = .01
+			size = 0.01
 			object.scale.x = size
 			object.scale.y = size
 			object.scale.z = size
 
+			findHatVertical(object);
 			object.children[0].material = materialSolid;
 
 			objects["faceLandmarks"] = object;
@@ -108,34 +115,34 @@ function loadHead(head, materialTexture, landmarks){
 
 function loadHat(){
 
-	loader.load(
-		// resource URL
-		'models/duckhat.obj',
-		// called when resource is loaded
-		function ( object ) {
-			size = 1.5
-			object.scale.x = size
-			object.scale.y = size
-			object.scale.z = size
-
-			object.position.y = -3
-
-			object.children[0].material = materialDuck;
-
-			objects["duckhat"] = object;
-			scene.add( object );
-
-
-		},
-		// called when loading is in progresses
-		function ( xhr ) {
-			console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-		},
-		// called when loading has errors
-		function ( error ) {
-			console.log( 'An error happened' );
-		}
-	);
+	// loader.load(
+	// 	// resource URL
+	// 	'models/duckhat.obj',
+	// 	// called when resource is loaded
+	// 	function ( object ) {
+	// 		size = 1.5
+	// 		object.scale.x = size
+	// 		object.scale.y = size
+	// 		object.scale.z = size
+	//
+	// 		object.position.y = -3
+	//
+	// 		object.children[0].material = materialDuck;
+	//
+	// 		objects["duckhat"] = object;
+	// 		scene.add( object );
+	//
+	//
+	// 	},
+	// 	// called when loading is in progresses
+	// 	function ( xhr ) {
+	// 		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+	// 	},
+	// 	// called when loading has errors
+	// 	function ( error ) {
+	// 		console.log( 'An error happened' );
+	// 	}
+	// );
 
 	var mtlLoader = new THREE.MTLLoader();
 	mtlLoader.setPath('models/');
@@ -143,22 +150,26 @@ function loadHat(){
 	  	materials.preload();
 	  	var objLoader = new THREE.OBJLoader();
 	  	objLoader.setMaterials(materials);
-	  	objLoader.setPath('models');
+	  	objLoader.setPath('models/');
 	  	objLoader.load('duckhat.obj', function(object) {
-		    	size = 1.5
+
+		    size = 1.5
 				object.scale.x = size
 				object.scale.y = size
 				object.scale.z = size
 
-				object.position.y = -3
-		    	scene.add(object);
-		  	},
+
+				object.position.set(0, headTop, 0);
+				console.log(object.position);
+		    scene.add(object);
+		  },
 		  	function ( xhr ) {
 				console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
 			},
 			// called when loading has errors
 			function ( error ) {
 				console.log( 'An error happened' );
+				console.log(error);
 			}
 		)
 	});
@@ -182,5 +193,9 @@ var render = function () {
   // Render the scene
   renderer.render(scene, camera);
 };
+
+function findHatVertical(object){
+	headTop = (object.children[0].geometry.getAttribute("position").array[574]) * 0.01;
+}
 
 render();
