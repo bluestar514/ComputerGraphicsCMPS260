@@ -37,13 +37,13 @@ var bethTop = 0.74859;
 var bethFront = 0.663237;
 var scaleX;
 var scaleZ;
+
+var landmarkFile = null;
 // ------------------------------------------------
 // FUN STARTS HERE
 // ------------------------------------------------
 
-
-
-var objects = {}
+var objects = {"faceLandmarks" : null}
 
 var loader = new THREE.OBJLoader();
 
@@ -113,6 +113,7 @@ function loadHat(objectName){ //do not include file type
 }
 
 function loadLandmark(objectName){ //do not include file type in objectName, make sure to include a / at the end of path
+	landmarkFile = objectName;
 
 	var materialSolid = new THREE.MeshPhongMaterial( { color: "#433F81" } );
 
@@ -145,6 +146,7 @@ function loadLandmark(objectName){ //do not include file type in objectName, mak
 	);
 }
 
+
 // Render Loop
 var render = function () {
   requestAnimationFrame( render );
@@ -171,8 +173,8 @@ function scaleDifferenceZ(object){
 }
 
 function toggleLandmarks(){
-	if( typeof objects["faceLandmarks"] === 'string' ){ //if we have not created them, make them
-
+	if( objects["faceLandmarks"] == null ){ //if we have not created them, make them
+		loadLandmark(landmarkFile);
 	}else{ //if they are already created, remove them
 		scene.remove(objects["faceLandmarks"]);
 		objects["faceLandmarks"] = null;
