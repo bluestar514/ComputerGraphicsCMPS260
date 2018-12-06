@@ -137,7 +137,7 @@ function loadHat(){
 
 		    size = 1;
 				object.scale.x = scaleX;
-				object.scale.y = size
+				object.scale.y = size;
 				object.scale.z = scaleZ;
 
 
@@ -177,7 +177,7 @@ var render = function () {
 function findHatVertical(object){
 	headTop = (object.children[0].geometry.getAttribute("position").array[574]) * 0.01;
 	console.log(object.children[0].geometry.getAttribute("position").array);
-	headTop = headTop / bethTop - 1;
+	headTop = headTop - bethTop;
 }
 
 function scaleDifferenceX(object){
