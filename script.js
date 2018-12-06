@@ -96,7 +96,8 @@ function loadHat(objectName){ //do not include file type
 	  	objLoader.setMaterials(materials);
 	  	objLoader.setPath('models/');
 	  	objLoader.load(objectName+'.obj', function(object) {
-
+				object.scale.x = scaleX;
+				object.scale.z = scaleZ;
 				object.position.set(0, headTop, 0);
 		    scene.add(object);
 		  },
@@ -144,37 +145,6 @@ function loadLandmark(objectName){ //do not include file type in objectName, mak
 	);
 }
 
-function loadHat(){
-
-	var mtlLoader = new THREE.MTLLoader();
-	mtlLoader.setPath('models/');
-	mtlLoader.load('duckhat.mtl', function(materials) {
-	  	materials.preload();
-	  	var objLoader = new THREE.OBJLoader();
-	  	objLoader.setMaterials(materials);
-	  	objLoader.setPath('models/');
-	  	objLoader.load('duckhat.obj', function(object) {
-
-		    size = 1;
-				object.scale.x = scaleX;
-				object.scale.y = size;
-				object.scale.z = scaleZ;
-
-
-				object.position.set(0, headTop, 0);
-		    scene.add(object);
-		  },
-		  	function ( xhr ) {
-				console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-			},
-			// called when loading has errors
-			function ( error ) {
-				console.log( 'An error happened' );
-			}
-		)
-	});
-}
-
 // Render Loop
 var render = function () {
   requestAnimationFrame( render );
@@ -202,9 +172,9 @@ function scaleDifferenceZ(object){
 
 function toggleLandmarks(){
 	if( typeof objects["faceLandmarks"] === 'string' ){ //if we have not created them, make them
-		
+
 	}else{ //if they are already created, remove them
-		scene.remove(objects["faceLandmarks"]); 
+		scene.remove(objects["faceLandmarks"]);
 		objects["faceLandmarks"] = null;
 	}
 }
