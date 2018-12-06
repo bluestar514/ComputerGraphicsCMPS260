@@ -33,6 +33,7 @@ document.body.appendChild( renderer.domElement );
 var headTop;
 var bethLeft = -0.67147;
 var bethRight = 0.746513;
+var bethTop = 0.74859;
 var scaleX;
 // ------------------------------------------------
 // FUN STARTS HERE
@@ -166,7 +167,7 @@ function loadHat(){
 				object.scale.z = size
 
 
-				object.position.set(0, 0, 0);
+				object.position.set(0, headTop, 0);
 		    scene.add(object);
 		  },
 		  	function ( xhr ) {
@@ -201,7 +202,7 @@ var render = function () {
 
 function findHatVertical(object){
 	headTop = (object.children[0].geometry.getAttribute("position").array[574]) * 0.01;
-	console.log(object.children[0].geometry.getAttribute("position").array);
+	headTop = headTop / bethTop - 1;
 }
 
 function scaleDifference(object){
