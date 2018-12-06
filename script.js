@@ -34,7 +34,9 @@ var headTop;
 var bethLeft = -0.67147;
 var bethRight = 0.746513;
 var bethTop = 0.74859;
+var bethFront = 0.663237;
 var scaleX;
+var scaleZ;
 // ------------------------------------------------
 // FUN STARTS HERE
 // ------------------------------------------------
@@ -104,7 +106,8 @@ function loadHead(head, materialTexture, landmarks){
 			object.scale.z = size
 
 			findHatVertical(object);
-			scaleDifference(object);
+			scaleDifferenceX(object);
+			scaleDifferenceZ(object);
 			object.children[0].material = materialSolid;
 
 			objects["faceLandmarks"] = object;
@@ -135,7 +138,7 @@ function loadHat(){
 		    size = 1;
 				object.scale.x = scaleX;
 				object.scale.y = size
-				object.scale.z = size
+				object.scale.z = scaleZ;
 
 
 				object.position.set(0, headTop, 0);
@@ -173,13 +176,17 @@ var render = function () {
 
 function findHatVertical(object){
 	headTop = (object.children[0].geometry.getAttribute("position").array[574]) * 0.01;
+	console.log(object.children[0].geometry.getAttribute("position").array);
 	headTop = headTop / bethTop - 1;
 }
 
-function scaleDifference(object){
+function scaleDifferenceX(object){
 	var leftSide = (object.children[0].geometry.getAttribute("position").array[51]) * 0.01;
-	var rightSide = (object.children[0].geometry.getAttribute("position").array[411]) * 0.01;
 	scaleX = bethLeft/leftSide;
 }
 
+function scaleDifferenceZ(object){
+	var headFront = (object.children[0].geometry.getAttribute("position").array[845]) * 0.01;
+	scaleZ = headFront / bethFront;
+}
 render();
