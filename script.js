@@ -2,6 +2,9 @@
 // BASIC SETUP
 // ------------------------------------------------
 
+//index 51 - left side
+//index 411 - right sdie
+
 // Create an empty scene
 var scene = new THREE.Scene();
 
@@ -28,6 +31,9 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
 var headTop;
+var bethLeft = -0.67147;
+var bethRight = 0.746513;
+var scaleX;
 // ------------------------------------------------
 // FUN STARTS HERE
 // ------------------------------------------------
@@ -97,6 +103,7 @@ function loadHead(head, materialTexture, landmarks){
 			object.scale.z = size
 
 			findHatVertical(object);
+			scaleDifference(object);
 			object.children[0].material = materialSolid;
 
 			objects["faceLandmarks"] = object;
@@ -153,14 +160,13 @@ function loadHat(){
 	  	objLoader.setPath('models/');
 	  	objLoader.load('duckhat.obj', function(object) {
 
-		    size = 1.5
-				object.scale.x = size
+		    size = 1;
+				object.scale.x = scaleX;
 				object.scale.y = size
 				object.scale.z = size
 
 
-				object.position.set(0, headTop, 0);
-				console.log(object.position);
+				object.position.set(0, 0, 0);
 		    scene.add(object);
 		  },
 		  	function ( xhr ) {
@@ -169,7 +175,6 @@ function loadHat(){
 			// called when loading has errors
 			function ( error ) {
 				console.log( 'An error happened' );
-				console.log(error);
 			}
 		)
 	});
@@ -196,6 +201,13 @@ var render = function () {
 
 function findHatVertical(object){
 	headTop = (object.children[0].geometry.getAttribute("position").array[574]) * 0.01;
+	console.log(object.children[0].geometry.getAttribute("position").array);
+}
+
+function scaleDifference(object){
+	var leftSide = (object.children[0].geometry.getAttribute("position").array[51]) * 0.01;
+	var rightSide = (object.children[0].geometry.getAttribute("position").array[411]) * 0.01;
+	scaleX = bethLeft/leftSide;
 }
 
 render();
