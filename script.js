@@ -39,27 +39,15 @@ var scaleX;
 // FUN STARTS HERE
 // ------------------------------------------------
 
-// Create a Cube Mesh with basic material
-var texture1 = new THREE.TextureLoader().load( "models/bethhead3d.jpg" );
-var texture2 = new THREE.TextureLoader().load( "models/mirekHead3d.jpg")
 
-var materialTexture1 = new THREE.MeshPhongMaterial( { map: texture1 });
-var materialTexture2 = new THREE.MeshPhongMaterial( { map: texture2} );
-var materialSolid = new THREE.MeshPhongMaterial( { color: "#433F81" } );
-
-var textureDuck = new THREE.TextureLoader().load( "models/duckhat.mtl" );
-var materialDuck = new THREE.MeshPhongMaterial( { map: textureDuck });
-//var cube = new THREE.Mesh( geometry, material );
-// var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-// Add cube to Scene
-// scene.add( cube );
 
 var objects = {}
 
 var loader = new THREE.OBJLoader();
 
-function loadHead(head, materialTexture, landmarks){
-
+function loadHead(head, textureName, landmarks){
+	var texture = new THREE.TextureLoader().load( textureName )
+	var materialTexture = new THREE.MeshPhongMaterial( { map: texture });
 	//clear Scene
 	while(scene.children.length > 0){
 		scene.remove(scene.children[0]);
@@ -93,9 +81,41 @@ function loadHead(head, materialTexture, landmarks){
 		}
 	);
 
+	loadLandmark(landmarks)
+}
+
+function loadHat(objectName){ //do not include file type
+
+	var mtlLoader = new THREE.MTLLoader();
+	mtlLoader.setPath('models/');
+	mtlLoader.load(objectName + '.mtl', function(materials) {
+	  	materials.preload();
+	  	var objLoader = new THREE.OBJLoader();
+	  	objLoader.setMaterials(materials);
+	  	objLoader.setPath('models/');
+	  	objLoader.load(objectName+'.obj', function(object) {
+
+				object.position.set(0, headTop, 0);
+		    scene.add(object);
+		  },
+		  	function ( xhr ) {
+				console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+			},
+			// called when loading has errors
+			function ( error ) {
+				console.log( 'An error happened' );
+			}
+		)
+	});
+}
+
+function loadLandmark(objectName){ //do not include file type in objectName, make sure to include a / at the end of path
+
+	var materialSolid = new THREE.MeshPhongMaterial( { color: "#433F81" } );
+
 	loader.load(
 		// resource URL
-		landmarks,
+		objectName,
 		// called when resource is loaded
 		function ( object ) {
 			size = 0.01
@@ -121,50 +141,9 @@ function loadHead(head, materialTexture, landmarks){
 	);
 }
 
-function loadHat(){
-
-	var mtlLoader = new THREE.MTLLoader();
-	mtlLoader.setPath('models/');
-	mtlLoader.load('duckhat.mtl', function(materials) {
-	  	materials.preload();
-	  	var objLoader = new THREE.OBJLoader();
-	  	objLoader.setMaterials(materials);
-	  	objLoader.setPath('models/');
-	  	objLoader.load('duckhat.obj', function(object) {
-
-		    size = 1;
-				object.scale.x = scaleX;
-				object.scale.y = size
-				object.scale.z = size
-
-
-				object.position.set(0, headTop, 0);
-		    scene.add(object);
-		  },
-		  	function ( xhr ) {
-				console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-			},
-			// called when loading has errors
-			function ( error ) {
-				console.log( 'An error happened' );
-			}
-		)
-	});
-}
-
 // Render Loop
 var render = function () {
   requestAnimationFrame( render );
-
-  // cube.rotation.x += 0.01;
-  // cube.rotation.y -= 0.01;
-
- //  	for (var i = 0; i < objects.length; i++) {
-
-	//   objects[i].rotation.x += 0.01;
-	//   objects[i].rotation.y += 0.01;
-
-	// }
 
 	controls.update();
   // Render the scene
@@ -181,5 +160,16 @@ function scaleDifference(object){
 	var rightSide = (object.children[0].geometry.getAttribute("position").array[411]) * 0.01;
 	scaleX = bethLeft/leftSide;
 }
+
+function toggleLandmarks(){
+	if( typeof objects["faceLandmarks"] === 'string' ){ //if we have not created them, make them
+		
+	}else{ //if they are already created, remove them
+		scene.remove(objects["faceLandmarks"]); 
+		objects["faceLandmarks"] = null;
+	}
+}
+
+loadHead('models/bethhead3d.obj', 'models/bethhead3d.jpg', 'models/bethfaceLandmarks.obj')
 
 render();

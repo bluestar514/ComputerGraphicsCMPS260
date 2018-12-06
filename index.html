@@ -15,13 +15,14 @@
    <script src="MTLloader.js"></script>
 </head>
 <body>
-  <button onclick="loadHead('models/bethhead3d.obj', materialTexture1, 'models/bethfaceLandmarks.obj')">Head 1</button>
-  <button onclick="loadHead('models/mirekHead3d.obj', materialTexture2,'models/mirekFaceLandmarks.obj')">Head 2</button>
+  <button onclick="loadHead('models/bethhead3d.obj', 'models/bethhead3d.jpg', 'models/bethfaceLandmarks.obj')">Head 1</button>
+  <button onclick="loadHead('models/mirekHead3d.obj', 'models/mirekHead3d.jpg','models/mirekFaceLandmarks.obj')">Head 2</button>
 
-  <button onclick="loadHat()">Duck Hat</button>
+  <button onclick="loadHat('duckhat')">Duck Hat</button>
+  <button onclick="loadHat('vikinghat')">Viking Hat</button>
   <button>Top Hat</button>
 
-  <!-- <button onclick="toggleLandmarks()">Toggle Landmarks</button> -->
+  <button onclick="toggleLandmarks()">Toggle Landmarks</button>
 
   <script src="script.js"></script>
 </body>
