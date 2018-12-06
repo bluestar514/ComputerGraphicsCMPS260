@@ -34,7 +34,9 @@ var headTop;
 var bethLeft = -0.67147;
 var bethRight = 0.746513;
 var bethTop = 0.74859;
+var bethFront = 0.663237;
 var scaleX;
+var scaleZ;
 // ------------------------------------------------
 // FUN STARTS HERE
 // ------------------------------------------------
@@ -124,7 +126,8 @@ function loadLandmark(objectName){ //do not include file type in objectName, mak
 			object.scale.z = size
 
 			findHatVertical(object);
-			scaleDifference(object);
+			scaleDifferenceX(object);
+			scaleDifferenceZ(object);
 			object.children[0].material = materialSolid;
 
 			objects["faceLandmarks"] = object;
@@ -141,6 +144,37 @@ function loadLandmark(objectName){ //do not include file type in objectName, mak
 	);
 }
 
+function loadHat(){
+
+	var mtlLoader = new THREE.MTLLoader();
+	mtlLoader.setPath('models/');
+	mtlLoader.load('duckhat.mtl', function(materials) {
+	  	materials.preload();
+	  	var objLoader = new THREE.OBJLoader();
+	  	objLoader.setMaterials(materials);
+	  	objLoader.setPath('models/');
+	  	objLoader.load('duckhat.obj', function(object) {
+
+		    size = 1;
+				object.scale.x = scaleX;
+				object.scale.y = size
+				object.scale.z = scaleZ;
+
+
+				object.position.set(0, headTop, 0);
+		    scene.add(object);
+		  },
+		  	function ( xhr ) {
+				console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+			},
+			// called when loading has errors
+			function ( error ) {
+				console.log( 'An error happened' );
+			}
+		)
+	});
+}
+
 // Render Loop
 var render = function () {
   requestAnimationFrame( render );
@@ -152,13 +186,18 @@ var render = function () {
 
 function findHatVertical(object){
 	headTop = (object.children[0].geometry.getAttribute("position").array[574]) * 0.01;
+	console.log(object.children[0].geometry.getAttribute("position").array);
 	headTop = headTop / bethTop - 1;
 }
 
-function scaleDifference(object){
+function scaleDifferenceX(object){
 	var leftSide = (object.children[0].geometry.getAttribute("position").array[51]) * 0.01;
-	var rightSide = (object.children[0].geometry.getAttribute("position").array[411]) * 0.01;
 	scaleX = bethLeft/leftSide;
+}
+
+function scaleDifferenceZ(object){
+	var headFront = (object.children[0].geometry.getAttribute("position").array[845]) * 0.01;
+	scaleZ = headFront / bethFront;
 }
 
 function toggleLandmarks(){
