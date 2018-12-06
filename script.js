@@ -123,35 +123,6 @@ function loadHead(head, materialTexture, landmarks){
 
 function loadHat(){
 
-	// loader.load(
-	// 	// resource URL
-	// 	'models/duckhat.obj',
-	// 	// called when resource is loaded
-	// 	function ( object ) {
-	// 		size = 1.5
-	// 		object.scale.x = size
-	// 		object.scale.y = size
-	// 		object.scale.z = size
-	//
-	// 		object.position.y = -3
-	//
-	// 		object.children[0].material = materialDuck;
-	//
-	// 		objects["duckhat"] = object;
-	// 		scene.add( object );
-	//
-	//
-	// 	},
-	// 	// called when loading is in progresses
-	// 	function ( xhr ) {
-	// 		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-	// 	},
-	// 	// called when loading has errors
-	// 	function ( error ) {
-	// 		console.log( 'An error happened' );
-	// 	}
-	// );
-
 	var mtlLoader = new THREE.MTLLoader();
 	mtlLoader.setPath('models/');
 	mtlLoader.load('duckhat.mtl', function(materials) {
