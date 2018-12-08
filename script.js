@@ -10,10 +10,17 @@ var scene = new THREE.Scene();
 
 // Create a basic perspective camera
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
-camera.position.z = 4;
+camera.position.z = 3;
 
-var light = new THREE.AmbientLight( 0xFFFFFF, 1);
+var objects = {"faceLandmarks" : null}
+var light = new THREE.PointLight( 0xfffaf0, 1, 100);
+var fillLight = new THREE.AmbientLight(0xfffaf0, 0.75);
+light.position.set(1, 1, 1);
+light.castShadow = true;
 scene.add(light);
+scene.add(fillLight);
+objects["light"] = light;
+objects["fillLight"] = fillLight;
 
 //TrackballControls
 var controls = new THREE.TrackballControls(camera);
@@ -25,7 +32,7 @@ var renderer = new THREE.WebGLRenderer({antialias:true});
 renderer.setClearColor("#000000");
 
 // Configure renderer size
-renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setSize( window.innerWidth, 600 );
 
 // Append Renderer to DOM
 document.body.appendChild( renderer.domElement );
@@ -33,6 +40,7 @@ document.body.appendChild( renderer.domElement );
 var headTop;
 var bethLeft = -0.67147;
 var bethRight = 0.746513;
+var bethWide = -bethLeft + bethRight;
 var bethTop = 0.74859;
 var bethFront = 0.663237;
 var scaleX;
@@ -43,19 +51,22 @@ var landmarkFile = null;
 // FUN STARTS HERE
 // ------------------------------------------------
 
-var objects = {"faceLandmarks" : null}
 
 var loader = new THREE.OBJLoader();
 
 function loadHead(head, textureName, landmarks){
-	var texture = new THREE.TextureLoader().load( textureName )
-	var materialTexture = new THREE.MeshPhongMaterial( { map: texture });
+	// var localPlane = loadLandmark(landmarks);
+	var texture = new THREE.TextureLoader().load( textureName );
+	var materialTexture = new THREE.MeshPhongMaterial( { map: texture, shininess: 10 });
 	//clear Scene
 	while(scene.children.length > 0){
 		scene.remove(scene.children[0]);
 	}
 
 	scene.add(light);
+	scene.add(fillLight);
+	objects["light"] = light;
+	objects["fillLight"] = fillLight;
 
 	// load a resource
 	loader.load(
@@ -83,7 +94,7 @@ function loadHead(head, textureName, landmarks){
 		}
 	);
 
-	loadLandmark(landmarks)
+	loadLandmark(landmarks);
 }
 
 function loadHat(objectName){ //do not include file type
@@ -96,6 +107,10 @@ function loadHat(objectName){ //do not include file type
 	  	objLoader.setMaterials(materials);
 	  	objLoader.setPath('models/');
 	  	objLoader.load(objectName+'.obj', function(object) {
+				// object.children[0].renderOrder = 999;
+				// object.children[0].onBeforeRender = function ( renderer ){
+				// 	renderer.clearDepth();
+				// }
 				object.scale.x = scaleX;
 				object.scale.z = scaleZ;
 				object.position.set(0, headTop, 0);
@@ -128,12 +143,16 @@ function loadLandmark(objectName){ //do not include file type in objectName, mak
 			object.scale.z = size
 
 			findHatVertical(object);
+
 			scaleDifferenceX(object);
 			scaleDifferenceZ(object);
+
 			object.children[0].material = materialSolid;
 
+			// var localPlane = new THREE.Plane ( new THREE.Vector3(0, headTop, 0), 1);
 			objects["faceLandmarks"] = object;
 			scene.add( object );
+			// return localPlane;
 		},
 		// called when loading is in progresses
 		function ( xhr ) {
@@ -158,13 +177,14 @@ var render = function () {
 
 function findHatVertical(object){
 	headTop = (object.children[0].geometry.getAttribute("position").array[574]) * 0.01;
-	console.log(object.children[0].geometry.getAttribute("position").array);
 	headTop = headTop - bethTop;
 }
 
 function scaleDifferenceX(object){
 	var leftSide = (object.children[0].geometry.getAttribute("position").array[51]) * 0.01;
-	scaleX = bethLeft/leftSide;
+	var rightSide = (object.children[0].geometry.getAttribute("position").array[411]) * 0.01;
+	var width = -leftSide + rightSide;
+	scaleX = bethWide/width;
 }
 
 function scaleDifferenceZ(object){
@@ -181,6 +201,16 @@ function toggleLandmarks(){
 	}
 }
 
-loadHead('models/bethhead3d.obj', 'models/bethhead3d.jpg', 'models/bethfaceLandmarks.obj')
+function toggleLights(){
+	if( objects["light"] == null){
+		objects["light"] = light;
+		scene.add(light);
+	} else {
+		scene.remove(objects["light"]);
+		objects["light"] = null;
+	}
+}
+
+loadHead('models/bethhead3d.obj', 'models/bethhead3d.jpg', 'models/bethfaceLandmarks.obj');
 
 render();
