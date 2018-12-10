@@ -184,12 +184,20 @@ function scaleDifferenceX(object){
 	var leftSide = (object.children[0].geometry.getAttribute("position").array[51]) * 0.01;
 	var rightSide = (object.children[0].geometry.getAttribute("position").array[411]) * 0.01;
 	var width = -leftSide + rightSide;
-	scaleX = bethWide/width;
+	if(width > bethWide){
+		scaleX = bethWide/width;
+	} else {
+		scaleX = width/bethWide;
+	}
 }
 
 function scaleDifferenceZ(object){
 	var headFront = (object.children[0].geometry.getAttribute("position").array[845]) * 0.01;
-	scaleZ = headFront / bethFront;
+	if(headFront > bethFront){
+		scaleZ = headFront / bethFront;
+	} else {
+		scaleZ = bethFront / headFront;
+	}
 }
 
 function toggleLandmarks(){
