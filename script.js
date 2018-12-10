@@ -97,7 +97,15 @@ function loadHead(head, textureName, landmarks){
 	loadLandmark(landmarks);
 }
 
-function loadHat(objectName){ //do not include file type
+function loadHat(objectName){
+	loadAccessory(objectName, "hat")
+}
+
+function loadGlasses(objectName){
+	loadAccessory(objectName, "glasses")
+}
+
+function loadAccessory(objectName, accessory){ //do not include file type
 
 	var mtlLoader = new THREE.MTLLoader();
 	mtlLoader.setPath('models/');
@@ -107,13 +115,15 @@ function loadHat(objectName){ //do not include file type
 	  	objLoader.setMaterials(materials);
 	  	objLoader.setPath('models/');
 	  	objLoader.load(objectName+'.obj', function(object) {
-				// object.children[0].renderOrder = 999;
-				// object.children[0].onBeforeRender = function ( renderer ){
-				// 	renderer.clearDepth();
-				// }
-				object.scale.x = scaleX;
-				object.scale.z = scaleZ;
-				object.position.set(0, headTop, 0);
+			// object.children[0].renderOrder = 999;
+			// object.children[0].onBeforeRender = function ( renderer ){
+			// 	renderer.clearDepth();
+			// }
+			object.scale.x = scaleX;
+			object.scale.z = scaleZ;
+			object.position.set(0, headTop, 0);
+			scene.remove(objects[accessory]);
+			objects[accessory] = object;
 		    scene.add(object);
 		  },
 		  	function ( xhr ) {
@@ -126,6 +136,8 @@ function loadHat(objectName){ //do not include file type
 		)
 	});
 }
+
+
 
 function loadLandmark(objectName){ //do not include file type in objectName, make sure to include a / at the end of path
 	landmarkFile = objectName;
