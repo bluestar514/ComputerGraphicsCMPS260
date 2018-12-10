@@ -2,12 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Three.js 101</title>
+  <title>Silly Hats</title>
   <!--  Simple reset to delete the margins  -->
   <style>
     body { margin: 0; }
     canvas { width: 100%; height: 500px; }
     button { padding: 25px;}
+    .head { background-color: CornflowerBlue}
+    .hat { background-color: Salmon}
+    .option {background-color: LightGreen}
+    .glasses {background-color: magenta}
   </style>
   <!--  Three.js CDN  -->
    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.min.js"></script>
@@ -16,15 +20,15 @@
    <script src="MTLloader.js"></script>
 </head>
 <body>
-  <button onclick="loadHead('models/bethhead3d.obj', 'models/bethhead3d.jpg', 'models/bethfaceLandmarks.obj')">Beth</button>
-  <button onclick="loadHead('models/mirekHead3d.obj', 'models/mirekHead3d.jpg','models/mirekFaceLandmarks.obj')">Mirek</button>
-  <button onclick="loadHead('models/mahikaHead3d.obj', 'models/mahikaHead3d.jpg','models/mahikaFaceLandmarks.obj')">Mahika</button>
-  <button onclick="loadHat('duckhat')">Duck Hat</button>
-  <button onclick="loadHat('vikinghat')">Viking Hat</button>
-  <button onclick="loadHat('dogears')">Dog Ears</button>
-  <button onclick="loadGlasses('glasses')">Glasses</button>
-  <button onclick="toggleLandmarks()">Toggle Landmarks</button>
-  <button onclick="toggleLights()">Toggle Lights</button>
+  <button class="head" onclick="loadHead('models/bethhead3d.obj', 'models/bethhead3d.jpg', 'models/bethfaceLandmarks.obj')">Beth</button>
+  <button class="head" onclick="loadHead('models/mirekHead3d.obj', 'models/mirekHead3d.jpg','models/mirekFaceLandmarks.obj')">Mirek</button>
+  <button class="head" onclick="loadHead('models/mahikaHead3d.obj', 'models/mahikaHead3d.jpg','models/mahikaFaceLandmarks.obj')">Mahika</button>
+  <button class="hat" onclick="loadHat('duckhat')">Duck Hat</button>
+  <button class="hat" onclick="loadHat('vikinghat')">Viking Hat</button>
+  <button class="hat" onclick="loadHat('dogears')">Dog Ears</button>
+  <button class="glasses" onclick="loadGlasses('glasses')">Glasses</button>
+  <button class="option" onclick="toggleLandmarks()">Toggle Landmarks</button>
+  <button class="option" onclick="toggleLights()">Toggle Lights</button>
   <br>
 
   <script src="script.js"></script>
