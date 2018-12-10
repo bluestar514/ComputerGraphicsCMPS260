@@ -22,7 +22,7 @@ scene.add(fillLight);
 objects["light"] = light;
 objects["fillLight"] = fillLight;
 
-//TrackballControls
+//OrbitControls
 var controls = new THREE.OrbitControls(camera);
 
 // Create a renderer with Antialiasing
@@ -60,7 +60,7 @@ var loader = new THREE.OBJLoader();
 function loadHead(head, textureName, landmarks){
 	// var localPlane = loadLandmark(landmarks);
 	var texture = new THREE.TextureLoader().load( textureName );
-	var materialTexture = new THREE.MeshPhongMaterial( { map: texture, 
+	var materialTexture = new THREE.MeshPhongMaterial( { map: texture,
 														shininess: 10,
 														clippingPlanes: [ localPlane ],
     													clipShadows: true });
@@ -108,13 +108,13 @@ function loadHat(objectName){
 	console.log(headTop)
 	localPlane.constant = headTop
 	loadAccessory(objectName, "hat")
-	
+
 }
 
 function loadGlasses(objectName){
-	
+
 	loadAccessory(objectName, "glasses")
-	
+
 }
 
 function loadAccessory(objectName, accessory){ //do not include file type
@@ -123,7 +123,7 @@ function loadAccessory(objectName, accessory){ //do not include file type
 	mtlLoader.setPath('models/');
 	mtlLoader.load(objectName + '.mtl', function(materials) {
 	  	materials.preload();
-	  	
+
 	  	var objLoader = new THREE.OBJLoader();
 	  	objLoader.setMaterials(materials);
 	  	objLoader.setPath('models/');
@@ -202,7 +202,11 @@ var render = function () {
 
 function findHatVertical(object){
 	headTop = (object.children[0].geometry.getAttribute("position").array[574]) * 0.01;
-	headTop = headTop - bethTop;
+	if(headTop > bethTop){
+		headTop = headTop - bethTop;
+	} else {
+		headTop = bethTop - headTop;
+	}
 }
 
 function scaleDifferenceX(object){
