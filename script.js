@@ -51,13 +51,14 @@ var landmarkFile = null;
 // FUN STARTS HERE
 // ------------------------------------------------
 
-var localPlane = new THREE.Plane( new THREE.Vector3( 0, - 1, 0 ), .9 );
+var localPlane = new THREE.Plane( new THREE.Vector3( 0, - 1, 0 ), 3 );
 
 renderer.localClippingEnabled = true;
 
 var loader = new THREE.OBJLoader();
 
 function loadHead(head, textureName, landmarks){
+	localPlane.constant = planeInitPos
 	// var localPlane = loadLandmark(landmarks);
 	var texture = new THREE.TextureLoader().load( textureName );
 	var materialTexture = new THREE.MeshPhongMaterial( { map: texture, 
@@ -103,10 +104,10 @@ function loadHead(head, textureName, landmarks){
 	loadLandmark(landmarks);
 }
 
-function loadHat(objectName){
+function loadHat(objectName, clippingPlaneLocation){
 	console.log(localPlane.constant)
 	console.log(headTop)
-	localPlane.constant -= headTop
+	localPlane.constant = clippingPlaneLocation - headTop
 	loadAccessory(objectName, "hat")
 	
 }
