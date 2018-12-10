@@ -51,13 +51,19 @@ var landmarkFile = null;
 // FUN STARTS HERE
 // ------------------------------------------------
 
+var localPlane = new THREE.Plane( new THREE.Vector3( 0, - 1, 0 ), 0.5 );
+
+renderer.localClippingEnabled = true;
 
 var loader = new THREE.OBJLoader();
 
 function loadHead(head, textureName, landmarks){
 	// var localPlane = loadLandmark(landmarks);
 	var texture = new THREE.TextureLoader().load( textureName );
-	var materialTexture = new THREE.MeshPhongMaterial( { map: texture, shininess: 10 });
+	var materialTexture = new THREE.MeshPhongMaterial( { map: texture, 
+														shininess: 10,
+														clippingPlanes: [ localPlane ],
+    													clipShadows: true });
 	//clear Scene
 	while(scene.children.length > 0){
 		scene.remove(scene.children[0]);
@@ -98,11 +104,17 @@ function loadHead(head, textureName, landmarks){
 }
 
 function loadHat(objectName){
+	console.log(localPlane.constant)
+	console.log(headTop)
+	localPlane.constant = headTop
 	loadAccessory(objectName, "hat")
+	
 }
 
 function loadGlasses(objectName){
+	
 	loadAccessory(objectName, "glasses")
+	
 }
 
 function loadAccessory(objectName, accessory){ //do not include file type
@@ -111,6 +123,7 @@ function loadAccessory(objectName, accessory){ //do not include file type
 	mtlLoader.setPath('models/');
 	mtlLoader.load(objectName + '.mtl', function(materials) {
 	  	materials.preload();
+	  	
 	  	var objLoader = new THREE.OBJLoader();
 	  	objLoader.setMaterials(materials);
 	  	objLoader.setPath('models/');
