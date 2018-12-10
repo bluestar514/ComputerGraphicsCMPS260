@@ -51,7 +51,7 @@ var landmarkFile = null;
 // FUN STARTS HERE
 // ------------------------------------------------
 
-var localPlane = new THREE.Plane( new THREE.Vector3( 0, - 1, 0 ), 0.5 );
+var localPlane = new THREE.Plane( new THREE.Vector3( 0, - 1, 0 ), .9 );
 
 renderer.localClippingEnabled = true;
 
@@ -106,7 +106,7 @@ function loadHead(head, textureName, landmarks){
 function loadHat(objectName){
 	console.log(localPlane.constant)
 	console.log(headTop)
-	localPlane.constant = headTop
+	localPlane.constant -= headTop
 	loadAccessory(objectName, "hat")
 	
 }
