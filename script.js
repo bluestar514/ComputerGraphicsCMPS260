@@ -23,7 +23,7 @@ objects["light"] = light;
 objects["fillLight"] = fillLight;
 
 //TrackballControls
-var controls = new THREE.TrackballControls(camera);
+var controls = new THREE.OrbitControls(camera);
 
 // Create a renderer with Antialiasing
 var renderer = new THREE.WebGLRenderer({antialias:true});
