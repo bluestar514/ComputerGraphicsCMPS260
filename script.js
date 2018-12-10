@@ -58,7 +58,7 @@ renderer.localClippingEnabled = true;
 var loader = new THREE.OBJLoader();
 
 function loadHead(head, textureName, landmarks){
-	localPlane.constant = planeInitPos
+	localPlane.constant = 3
 	// var localPlane = loadLandmark(landmarks);
 	var texture = new THREE.TextureLoader().load( textureName );
 	var materialTexture = new THREE.MeshPhongMaterial( { map: texture,
